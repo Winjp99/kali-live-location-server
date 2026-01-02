@@ -1,0 +1,58 @@
+# =========================
+# Logs & runtime files
+# =========================
+*.log
+*.pid
+*.sqlite
+*.db
+
+# =========================
+# Environment & secrets
+# =========================
+.env
+*.env
+config.env
+secrets.env
+
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+venv/
+.venv/
+pip-wheel-metadata/
+
+# =========================
+# Flask
+# =========================
+instance/
+*.session
+
+# =========================
+# OS / Editor
+# =========================
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/
+
+# =========================
+# Cloudflare / Tunnel
+# =========================
+*.pem
+*.key
+*.crt
+*.json
+cloudflared.yml
+
+# =========================
+# Temporary / Cache
+# =========================
+.cache/
+.tmp/
+tmp/
