@@ -1,23 +1,4 @@
 from flask import Flask, request, jsonify, send_from_directory
-app = Flask(__name__)
-
-latest_location = {}
-
-@app.route('/update', methods=['POST'])
-def update():
-    global latest_location
-    latest_location = request.json
-    return jsonify({"status": "ok"})
-
-@app.route('/location')
-def location():
-    return jsonify(latest_location)
-
-@app.route('/')
-def map_page():
-    return send_from_directory('static', 'map.html')
-
-app.run(host='0.0.0.0', port=8080)
 
 app = Flask(__name__)
 latest = {}
