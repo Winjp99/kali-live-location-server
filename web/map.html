@@ -1,29 +1,59 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <title>Kali Live Location</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
-  <style>#map{height:100vh}</style>
+    <title>kali live location server</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Load Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        #map { height: 500px; width: 100%; }
+    </style>
 </head>
 <body>
-<div id="map"></div>
 
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script>
-const map = L.map('map').setView([0,0], 2);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-const marker = L.marker([0,0]).addTo(map);
+    <h2>Pelacakan Lokasi Real-time</h2>
+    <div id="map"></div>
+    <p>Lat: <span id="lat"></span>, Long: <span id="lon"></span></p>
 
-async function update(){
-  const r = await fetch('/location');
-  const d = await r.json();
-  if(d.latitude){
-    marker.setLatLng([d.latitude, d.longitude]);
-    map.setView([d.latitude, d.longitude], 16);
-  }
-}
-setInterval(update, 5000);
-</script>
+    <!-- Load Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // 1. Inisialisasi Peta
+        const map = L.map('map').setView([0, 0], 2);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // 2. Tambahkan Marker (Penanda)
+        const marker = L.marker([0, 0]).addTo(map);
+
+        // 3. Fungsi untuk menangani perubahan lokasi
+        if (navigator.geolocation) {
+            // watchPosition memantau perubahan lokasi secara real-time
+            navigator.geolocation.watchPosition(function(position) {
+                const lat = position.coords.latitude;
+                const lon = position.coords.longitude;
+
+                // Update tampilan koordinat
+                document.getElementById('lat').innerText = lat;
+                document.getElementById('lon').innerText = lon;
+
+                // Pindahkan marker ke posisi baru
+                marker.setLatLng([lat, lon]);
+                
+                // Geser peta ke posisi baru
+                map.setView([lat, lon], 15);
+            }, function(error) {
+                console.error("Error mendapatkan lokasi: ", error);
+            }, {
+                enableHighAccuracy: true, // Akurasi tinggi
+                maximumAge: 0,
+                timeout: 5000
+            });
+        } else {
+            alert("Geolocation tidak didukung oleh browser Anda.");
+        }
+    </script>
 </body>
 </html>
